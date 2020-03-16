@@ -11,10 +11,10 @@ group Register phase:\na) The directory discovers Things\n    and retireves TDs 
         Thing -> Directory  : mDNS resp.\n"PTR lamp._device._sub._wot._tcp.local"
         Directory --> Thing : mDNS query\n"ANY lamp._device._sub._wot._tcp.local"
         Thing -> Directory  : mDNS resp.\n"SRV 1 0 10080 lamp.local"\n"TXT retrieve=/Things"
-        Directory --> Thing : mDNS query\n"AAAA lamp.local"
-        Thing -> Directory  : mDNS resp.\n"AAAA fe80::2222"
     end
     group Register to directory
+        Directory --> Thing : mDNS query\n"AAAA lamp.local"
+        Thing -> Directory  : mDNS resp.\n"AAAA fe80::2222"
         Directory -> Thing  : GET http://lamp.local/Things
         Thing -> Directory  : Thing Description: {"@context":...}
     end
@@ -25,10 +25,10 @@ group Register phase:\nb) Things discover the directory\n   and register TDs by 
         Directory -> Thing  : mDNS resp.\n"PTR mongo._directory._sub._wot._tcp.local"
         Thing --> Directory : mDNS query\n"ANY mongo._directory._sub.wot._tcp.local"
         Directory -> Thing  : mDNS resp.\n"SRV 1 0 80 tdir-mongo.local"\n"TXT retrieve=/Things register=/Things/register"
-        Thing --> Directory : mDNS query\n"AAAA tdir-mongo.local"
-        Directory -> Thing  : mDNS resp.\n"AAAA fe80::1111"
     end
     group Register to directory
+        Thing --> Directory : mDNS query\n"AAAA tdir-mongo.local"
+        Directory -> Thing  : mDNS resp.\n"AAAA fe80::1111"
         Thing -> Directory  : POST http://tdir-mongo.local/Things/register\n(payload: Thing Description)
         Directory -> Thing  : 201 Created
     end
@@ -39,10 +39,10 @@ group Consume phase:
         Directory -> Consumer  : mDNS resp.\n"PTR mongo._directory._sub._wot._tcp.local"
         Consumer --> Directory : mDNS query\n"ANY mongo._directory._sub.wot._tcp.local"
         Directory -> Consumer  : mDNS resp.\n"SRV 1 0 80 tdir-mongo.local"\n"TXT retrieve=/Things register=/Things/register"
-        Consumer --> Directory : mDNS query\n"AAAA tdir-mongo.local"
-        Directory -> Consumer  : mDNS resp.\n"AAAA fe80::1111"
     end
     group Query to directory
+        Consumer --> Directory : mDNS query\n"AAAA tdir-mongo.local"
+        Directory -> Consumer  : mDNS resp.\n"AAAA fe80::1111"
         Consumer -> Directory  : GET http://tdir-mongo.local/Things
         Directory -> Consumer  : ["lamp","otherThing1",...]
         Consumer -> Directory  : GET http://tdir-mongo.local/Things/lamp
